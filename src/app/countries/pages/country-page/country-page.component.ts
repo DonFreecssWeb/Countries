@@ -28,8 +28,7 @@ export class CountryPageComponent implements OnInit {
         switchMap( ({id}) => this.countryService.searchCountryByAlphaCode(id) )
       ).subscribe( country => {
         if(!country) return this.router.navigateByUrl('/countries')
-        this.country = country
-      console.log(country)
+        this.country = country   
         return
       })
   }

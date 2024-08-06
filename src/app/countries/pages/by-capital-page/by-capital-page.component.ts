@@ -1,4 +1,4 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
 import { Pokemon, Result } from '../../interfaces/pokemons';
 import { CountriesService } from '../../services/countries.service';
@@ -9,15 +9,25 @@ import { Country } from '../../interfaces/country';
   templateUrl: './by-capital-page.component.html',
   styles: ``
 })
-export class ByCapitalPageComponent {
-  constructor(private countriesService:CountriesService){}
- 
+export class ByCapitalPageComponent implements OnInit {
   public countries:Country[] =[]
+  isLoading = false
+  initialValue:string = ''
+
+  constructor(private countriesService:CountriesService){}
+
+  ngOnInit(): void {
+    this.countries = this.countriesService.cacheStore.byCapital.countries
+    this.initialValue = this.countriesService.cacheStore.byCapital.term
+  }
+ 
 
   searchByCapital(term:string):void{
+    this.isLoading = true
       this.countriesService.searchCapital(term).subscribe(
         (data) => {
-            this.countries = data                   
+            this.countries = data           
+            this.isLoading = false        
         }
       )
   }
